@@ -65,6 +65,27 @@ else
     echo "  ⚠ Patch 2: Channel auth pattern not found (may have changed upstream)"
 fi
 
+# --- Patch 3: Channel permissions ---
+# Enables per-sender allow/deny for channel messages.
+sed -i 's/F8("tengu_harbor_permissions",!1)/true/g' "$CLI_JS"
+echo "  ✓ Patch 3: Channel permissions (tengu_harbor_permissions) → enabled"
+
+# --- Patch 4: Session memory + compaction ---
+# Enables built-in session memory that persists across compactions.
+sed -i 's/F8("tengu_session_memory",!1)/true/g' "$CLI_JS"
+sed -i 's/F8("tengu_sm_compact",!1)/true/g' "$CLI_JS"
+echo "  ✓ Patch 4: Session memory + compaction → enabled"
+
+# --- Patch 5: Quiet hollow (thinking summaries) ---
+# Shows thinking summaries instead of full thinking blocks, saving tokens.
+sed -i 's/F8("tengu_quiet_hollow",!1)/true/g' "$CLI_JS"
+echo "  ✓ Patch 5: Thinking summaries (tengu_quiet_hollow) → enabled"
+
+# --- Patch 6: Paper halyard (slim CLAUDE.md loading) ---
+# Skips Project-level CLAUDE.md entries to reduce context.
+sed -i 's/F8("tengu_paper_halyard",!1)/true/g' "$CLI_JS"
+echo "  ✓ Patch 6: Slim CLAUDE.md loading (tengu_paper_halyard) → enabled"
+
 # Install
 mkdir -p "$INSTALL_DIR"
 cp "$CLI_JS" "$INSTALL_DIR/cli.js"
